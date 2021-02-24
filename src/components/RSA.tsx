@@ -9,14 +9,14 @@ const defaultStyle: CSSProperties = {
 };
 
 export const RSAEncode: React.FC = () => {
-  const [plainNumber, setPlainNumber] = useState<number>();
+  const [plainText, setPlainText] = useState<string>("");
   const [p, setP] = useState<number>();
   const [q, setQ] = useState<number>();
   const [encodedText, setEncodedText] = useState<string>("");
 
   const encode = () => {
-    if (plainNumber && p && q) {
-      setEncodedText(rsaEncode(plainNumber, p, q).toString());
+    if (plainText && p && q) {
+      setEncodedText(rsaEncode(plainText, p, q));
     }
   };
 
@@ -25,8 +25,8 @@ export const RSAEncode: React.FC = () => {
       <Text type="success">Encode</Text>
       <Input
         placeholder="Input your plain number"
-        value={plainNumber}
-        onChange={(event) => setPlainNumber(parseInt(event.target.value))}
+        value={plainText}
+        onChange={(event) => setPlainText(event.target.value)}
         style={defaultStyle}
       />
       <Input
@@ -59,14 +59,14 @@ export const RSAEncode: React.FC = () => {
 };
 
 export const RSADecode: React.FC = () => {
-  const [encodedNumber, setEncodedNumber] = useState<number>();
+  const [encodedText, setEncodedText] = useState<string>("");
   const [p, setP] = useState<number>();
   const [q, setQ] = useState<number>();
   const [decodedText, setDecodedText] = useState<string>("");
 
   const decode = () => {
-    if (encodedNumber && p && q) {
-      setDecodedText(rsaDecode(encodedNumber, p, q).toString());
+    if (encodedText && p && q) {
+      setDecodedText(rsaDecode(encodedText, p, q));
     }
   };
 
@@ -74,9 +74,9 @@ export const RSADecode: React.FC = () => {
     <>
       <Text type="success">Decode</Text>
       <Input
-        placeholder="Input your encoded number"
-        value={encodedNumber}
-        onChange={(event) => setEncodedNumber(parseInt(event.target.value))}
+        placeholder="Input your encoded numbers"
+        value={encodedText}
+        onChange={(event) => setEncodedText(event.target.value)}
         style={defaultStyle}
       />
       <Input

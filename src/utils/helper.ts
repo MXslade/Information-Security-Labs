@@ -1,3 +1,4 @@
+import { Result } from "antd";
 import { P as defaultP, S, modVal } from "./blowFishConstants";
 
 const alphabet: string = "abcdefghijklmnopqrstuvwxyz";
@@ -373,11 +374,8 @@ const bigIntPow = (a: bigint, b: number): bigint => {
   return result;
 };
 
-export const rsaEncode = (
-  plainNumber: number,
-  p: number,
-  q: number
-): number => {
+export const rsaEncode = (plainText: string, p: number, q: number): string => {
+  let text = plainText.replaceAll(" ", "");
   const n = p * q;
   let e = 2;
   const phi = (p - 1) * (q - 1);
@@ -393,14 +391,29 @@ export const rsaEncode = (
   const k = 2;
   const d = (1 + k * phi) / e;
 
-  return parseInt((bigIntPow(BigInt(plainNumber), e) % BigInt(n)).toString());
+  let result = "";
+
+  for (let i = 0; i < plainText.length; ++i) {
+    let index = alphabet.indexOf(plainText.charAt(i));
+    let c = bigIntPow(BigInt(index), e) % BigInt(n);
+    result += c + " ";
+  }
+
+  return result;
 };
 
 export const rsaDecode = (
-  encodedNumber: number,
+  encodedText: string,
   p: number,
   q: number
-): number => {
+): string => {
+  const encodedNumbers = encodedText
+    .trim()
+    .split(" ")
+    .map((item) => parseInt(item));
+
+  console.log(encodedNumbers);
+
   const n = p * q;
   let e = 2;
   const phi = (p - 1) * (q - 1);
@@ -416,5 +429,12 @@ export const rsaDecode = (
   const k = 2;
   const d = (1 + k * phi) / e;
 
-  return parseInt((bigIntPow(BigInt(encodedNumber), d) % BigInt(n)).toString());
+  let result = "";
+
+  encodedNumbers.forEach((item) => {
+    let m = bigIntPow(BigInt(item), d) % BigInt(n);
+    result += alphabet.charAt(parseInt(m.toString()));
+  });
+
+  return result;
 };

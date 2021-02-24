@@ -1,26 +1,35 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import "antd/dist/antd.css";
+import { Layout } from "antd";
+import Main from "./components/Main";
 
-function App() {
+const App: React.FC = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <Layout.Header
+        style={{
+          color: "white",
+          textAlign: "center",
+          fontSize: "2.5rem",
+          fontFamily: "Oswald",
+        }}
+      >
+        Muldashev Turar CSSE 1801K
+      </Layout.Header>
+      <Layout>
+        <Layout.Content
+          style={{
+            width: "80%",
+            minWidth: "300px",
+            justifySelf: "center",
+            alignSelf: "center",
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Main />
+        </Layout.Content>
+      </Layout>
+    </>
   );
-}
+};
 
 export default App;

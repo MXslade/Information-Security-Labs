@@ -1,6 +1,7 @@
 import React, { useState, CSSProperties } from "react";
 import { Typography, Input, Button } from "antd";
-import { rsaEncode, rsaDecode } from "../utils/helper";
+import { rsaEncode, rsaDecode, alphabet } from "../utils/helper";
+import { IRSAEncode } from "../utils/interfaces";
 
 const { Text } = Typography;
 
@@ -13,10 +14,13 @@ export const RSAEncode: React.FC = () => {
   const [p, setP] = useState<number>();
   const [q, setQ] = useState<number>();
   const [encodedText, setEncodedText] = useState<string>("");
+  const [result, setResult] = useState<IRSAEncode>();
 
   const encode = () => {
     if (plainText && p && q) {
-      setEncodedText(rsaEncode(plainText, p, q));
+      const temp = rsaEncode(plainText, p, q);
+      setEncodedText(temp.encodedText);
+      setResult(temp);
     }
   };
 
@@ -54,6 +58,42 @@ export const RSAEncode: React.FC = () => {
           contentEditable={false}
         />
       </div>
+      {result && p && q && (
+        <div>
+          <p>
+            n = p * q = {p} * {q} = {result.n}
+          </p>
+          <p>
+            Φ(n) = (P-1)(Q-1) = {p - 1} * {q - 1} = {result.phi}
+          </p>
+          <p>
+            1 {"<"} e {"<"} Φ(n)
+          </p>
+          <p>e = {result.e}</p>
+          <p>k = {result.k}</p>
+          <p>
+            d = (k*Φ(n) + 1) / e = ({result.k} * {result.phi} + 1) / {result.e}{" "}
+            = {result.d}
+          </p>
+          <p>
+            <strong>
+              Public Key: ({result.n} and {result.e})
+            </strong>
+          </p>
+          <p>
+            <strong>
+              Private Key: ({result.n} and {result.d})
+            </strong>
+          </p>
+          {result.encodedNumbers.map((item, index) => (
+            <p key={index}>
+              {plainText.charAt(index)} ^ e mod n ={" "}
+              {alphabet.indexOf(plainText.charAt(index))} ^ {result.e} mod{" "}
+              {result.n} = {item}
+            </p>
+          ))}
+        </div>
+      )}
     </>
   );
 };

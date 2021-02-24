@@ -1,7 +1,8 @@
 import { Result } from "antd";
 import { P as defaultP, S, modVal } from "./blowFishConstants";
+import { IRSAEncode } from "./interfaces";
 
-const alphabet: string = "abcdefghijklmnopqrstuvwxyz";
+export const alphabet: string = "abcdefghijklmnopqrstuvwxyz";
 let P = defaultP.slice();
 
 export const caeserEncode = (plainText: string, key: number): string => {
@@ -374,7 +375,11 @@ const bigIntPow = (a: bigint, b: number): bigint => {
   return result;
 };
 
-export const rsaEncode = (plainText: string, p: number, q: number): string => {
+export const rsaEncode = (
+  plainText: string,
+  p: number,
+  q: number
+): IRSAEncode => {
   let text = plainText.replaceAll(" ", "");
   const n = p * q;
   let e = 2;
@@ -392,14 +397,24 @@ export const rsaEncode = (plainText: string, p: number, q: number): string => {
   const d = (1 + k * phi) / e;
 
   let result = "";
+  const encodedNumbers: number[] = [];
 
   for (let i = 0; i < plainText.length; ++i) {
     let index = alphabet.indexOf(plainText.charAt(i));
     let c = bigIntPow(BigInt(index), e) % BigInt(n);
+    encodedNumbers.push(parseInt(c.toString()));
     result += c + " ";
   }
 
-  return result;
+  return {
+    encodedText: result,
+    encodedNumbers: encodedNumbers,
+    n: n,
+    e: e,
+    phi: phi,
+    k: k,
+    d: d,
+  };
 };
 
 export const rsaDecode = (

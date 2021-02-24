@@ -1,7 +1,7 @@
 import React, { useState, CSSProperties } from "react";
 import { Typography, Input, Button } from "antd";
 import { rsaEncode, rsaDecode, alphabet } from "../utils/helper";
-import { IRSAEncode } from "../utils/interfaces";
+import { IRSAEncode, IRSADecode } from "../utils/interfaces";
 
 const { Text } = Typography;
 
@@ -103,10 +103,13 @@ export const RSADecode: React.FC = () => {
   const [p, setP] = useState<number>();
   const [q, setQ] = useState<number>();
   const [decodedText, setDecodedText] = useState<string>("");
+  const [result, setResult] = useState<IRSADecode>();
 
   const decode = () => {
     if (encodedText && p && q) {
-      setDecodedText(rsaDecode(encodedText, p, q));
+      const temp = rsaDecode(encodedText, p, q);
+      setDecodedText(temp.decodedText);
+      setResult(temp);
     }
   };
 
@@ -144,6 +147,41 @@ export const RSADecode: React.FC = () => {
           contentEditable={false}
         />
       </div>
+      {result && p && q && (
+        <div>
+          <p>
+            n = p * q = {p} * {q} = {result.n}
+          </p>
+          <p>
+            Φ(n) = (P-1)(Q-1) = {p - 1} * {q - 1} = {result.phi}
+          </p>
+          <p>
+            1 {"<"} e {"<"} Φ(n)
+          </p>
+          <p>e = {result.e}</p>
+          <p>k = {result.k}</p>
+          <p>
+            d = (k*Φ(n) + 1) / e = ({result.k} * {result.phi} + 1) / {result.e}{" "}
+            = {result.d}
+          </p>
+          <p>
+            <strong>
+              Public Key: ({result.n} and {result.e})
+            </strong>
+          </p>
+          <p>
+            <strong>
+              Private Key: ({result.n} and {result.d})
+            </strong>
+          </p>
+          {result.encodedNumbers.map((item, index) => (
+            <p key={index}>
+              {item} ^ d mod n = {item} ^ {result.d} mod {result.n} ={" "}
+              {result.decodedText.charAt(index)}
+            </p>
+          ))}
+        </div>
+      )}
     </>
   );
 };

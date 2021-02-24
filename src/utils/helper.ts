@@ -1,6 +1,6 @@
 import { Result } from "antd";
 import { P as defaultP, S, modVal } from "./blowFishConstants";
-import { IRSAEncode } from "./interfaces";
+import { IRSADecode, IRSAEncode } from "./interfaces";
 
 export const alphabet: string = "abcdefghijklmnopqrstuvwxyz";
 let P = defaultP.slice();
@@ -421,13 +421,11 @@ export const rsaDecode = (
   encodedText: string,
   p: number,
   q: number
-): string => {
+): IRSADecode => {
   const encodedNumbers = encodedText
     .trim()
     .split(" ")
     .map((item) => parseInt(item));
-
-  console.log(encodedNumbers);
 
   const n = p * q;
   let e = 2;
@@ -451,5 +449,13 @@ export const rsaDecode = (
     result += alphabet.charAt(parseInt(m.toString()));
   });
 
-  return result;
+  return {
+    encodedNumbers: encodedNumbers,
+    decodedText: result,
+    n: n,
+    e: e,
+    phi: phi,
+    k: k,
+    d: d,
+  };
 };

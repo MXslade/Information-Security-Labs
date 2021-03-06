@@ -17,3 +17,9 @@ export interface IRSADecode {
   k: number;
   d: number;
 }
+
+export interface Message {
+  id?: number;
+  sentTime: number;
+  content: string;
+}

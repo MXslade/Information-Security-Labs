@@ -5,5 +5,6 @@ export enum Algorithm {
   TRANSPOSITION = "Transposition",
   BLOWFISH = "Blowfish",
   RSA = "RSA",
+  DIFFIE_HELLMAN = "Diffie-Hellman",
   AES = "AES",
 }

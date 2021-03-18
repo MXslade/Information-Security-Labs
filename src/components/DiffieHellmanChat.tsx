@@ -62,12 +62,12 @@ export const DiffieHellmanChat: React.FC = () => {
   useEffect(() => {
     if (lastMessage && sharedSecretKey) {
       const item = document.createElement("div");
-      item.innerHTML = `<p><strong>${
+      item.innerHTML = `<p><strong>${new Date(
         lastMessage.sentTime
-      }<strong></p><p>${caeserDecode(
+      ).toLocaleTimeString()}</strong></p><p>${caeserDecode(
         lastMessage.content,
         sharedSecretKey
-      )}</p><br>`;
+      )}</p><hr/>`;
       document.getElementById("chat")?.appendChild(item);
       console.log("chat Item added");
     }

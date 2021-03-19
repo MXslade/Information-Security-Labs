@@ -17,3 +17,11 @@ export const diffieHellmanAPI = {
     return instance.post("message", message);
   },
 };
+
+export const passwordProtectionAPI = {
+  authenticate(password: string) {
+    return instance.post("password-protection", {
+      password: password,
+    });
+  },
+};
